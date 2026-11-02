@@ -1,0 +1,36 @@
+@if (svc.depenses.isLoading()) {
+  <p>Chargement...</p>
+} @else if (svc.depenses.error()) {
+  <p>Impossible de charger les dépenses.</p>
+  <button (click)="svc.depenses.reload()">Réessayer</button>
+} @else if (svc.depenses.value()) {
+  <div class="filtres">
+    <label>Mois :
+      <input type="month" [value]="mois()" (change)="changerMois($event)">
+    </label>
+    <label>Catégorie :
+      <select [value]="categorie()" (change)="changerCategorie($event)">
+        <option value="">Toutes</option>
+        @for (c of categories; track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  <div class="total">
+    Total du mois : {{ total() | currency:'EUR' }}
+  </div>
+
+  <div class="liste">
+    @for (d of depensesFiltrees(); track d.id) {
+      @defer (on viewport) {
+        <app-depense-card [depense]="d"></app-depense-card>
+      } @placeholder {
+        <p style="padding: 15px; color: #666;">Chargement de la carte...</p>
+      }
+    } @empty {
+      <p>Aucune dépense ne correspond à cette sélection.</p>
+    }
+  </div>
+}

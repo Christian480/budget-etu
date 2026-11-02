@@ -1,0 +1,38 @@
+<h2>Ajouter une nouvelle dépense</h2>
+
+<form (submit)="enregistrer($event)">
+  <label>
+    Libellé :
+    <input type="text" [value]="modele().libelle" (input)="majLibelle($event)" (blur)="marquerLibelleTouche()">
+    @if (f().libelle.touched && f().libelle.invalid) {
+      <span class="error">Le libellé est obligatoire (2 caractères minimum).</span>
+    }
+  </label>
+
+  <label>
+    Montant (€) :
+    <input type="number" [value]="modele().montant" (input)="majMontant($event)" (blur)="marquerMontantTouche()">
+    @if (f().montant.touched && f().montant.invalid) {
+      <span class="error">Le montant doit être supérieur ou égal à 0,01 €.</span>
+    }
+  </label>
+
+  <label>
+    Date :
+    <input type="date" [value]="modele().date" [max]="dateDuJour" (input)="majDate($event)" (blur)="marquerDateTouche()">
+    @if (f().date.touched && f().date.invalid) {
+      <span class="error">La date ne peut pas être dans le futur.</span>
+    }
+  </label>
+
+  <label>
+    Catégorie :
+    <select [value]="modele().categorie" (change)="majCategorie($event)">
+      @for (c of categories; track c) {
+        <option [value]="c">{{ c }}</option>
+      }
+    </select>
+  </label>
+
+  <button type="submit" [disabled]="f().invalid">Enregistrer</button>
+</form>

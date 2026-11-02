@@ -1,0 +1,39 @@
+<h2>Statistiques d'octobre 2026</h2>
+
+<div class="stats-container">
+  <label>
+    Budget mensuel (€) :
+    <input type="number" [value]="svc.budgetMensuel()" (input)="changerBudget($event)">
+  </label>
+
+  <div class="card-stat">
+    <p><strong>Total dépensé :</strong> {{ totalMois() | currency:'EUR' }}</p>
+    <p><strong>Reste à dépenser :</strong> {{ resteADepenser() | currency:'EUR' }}</p>
+    <p><strong>Catégorie la plus coûteuse :</strong> {{ categoriePlusCouteuse() }}</p>
+  </div>
+
+  <div class="card-stat">
+    <p>Progression du budget : {{ pourcentageBrut() | number:'1.0-1' }}%</p>
+    <div class="progress-bar-container">
+      <div class="progress-bar" [class.depasse]="totalMois() > svc.budgetMensuel()" [style.width.%]="pourcentageBudget()"></div>
+    </div>
+    @if (totalMois() > svc.budgetMensuel()) {
+      <p class="alerte">Attention, vous avez dépassé votre budget mensuel !</p>
+    }
+  </div>
+
+  <div class="card-stat">
+    <p><strong>Détail par catégorie :</strong></p>
+    @for (cat of totauxParCategorie(); track cat.categorie) {
+      <div class="cat-stat-item">
+        <div class="cat-label">
+          <span>{{ cat.categorie }}</span>
+          <span>{{ cat.total | currency:'EUR' }}</span>
+        </div>
+        <div class="cat-bar-bg">
+          <div class="cat-bar-fill" [style.width.%]="cat.pourcentage"></div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

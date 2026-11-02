@@ -1,0 +1,21 @@
+@if (depense.isLoading()) {
+  <p>Chargement des détails...</p>
+} @else if (depense.error()) {
+  <p>Erreur lors du chargement de la dépense ou dépense introuvable.</p>
+  <a routerLink="/depenses">Retour à la liste</a>
+} @else if (depense.value()) {
+  <div class="detail-card">
+    <h2>{{ depense.value()?.libelle }}</h2>
+    <p><strong>Montant :</strong> {{ depense.value()?.montant | currency:'EUR' }}</p>
+    <p><strong>Date :</strong> {{ depense.value()?.date | date:'dd/MM/yyyy' }}</p>
+    <p>
+      <strong>Catégorie :</strong> 
+      <app-badge-categorie [categorie]="depense.value()!.categorie"></app-badge-categorie>
+    </p>
+    
+    <div class="actions">
+      <button class="btn-danger" (click)="supprimerDepense()">Supprimer</button>
+      <a routerLink="/depenses">Retour aux dépenses</a>
+    </div>
+  </div>
+}
